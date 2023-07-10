@@ -1,0 +1,66 @@
+<html>
+  <head></head>
+  <body>
+    Channel ID
+    <input type="text" id = "channelID"> <br>
+    Video ID
+    <input type="text" id = "videoID"> <br>
+    <button type = "button" onclick = "channel(); video();">Show Statistics</button>
+
+    <p>
+      Statistics : <br>
+      - Channel Name : <span id = "channelName"></span> <br>
+      - Channel Subscribers : <span id = "channelSubscribers"></span> <br>
+      - Channel Videos : <span id = "channelVideos"></span> <br>
+      - Channel Views : <span id = "channelViews"></span> <br>
+      - Video Views : <span id = "videoViews"></span> <br>
+      - Video Likes : <span id = "videoLikes"></span> <br>
+      - Video Comments : <span id = "videoComments"></span> <br>
+    </p>
+
+    <script>
+      var apiKey = ''; // YouTube Data API V3 Key
+
+      function channel() {
+        channelID = document.querySelector("#channelID").value;
+        var part = 'snippet,contentDetails,statistics';
+
+        var url = 'https://www.googleapis.com/youtube/v3/channels';
+        url += '?part=' + encodeURIComponent(part);
+        url += '&id=' + encodeURIComponent(channelID);
+        url += '&key=' + encodeURIComponent(apiKey);
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            var channel = data.items[0];
+
+            document.querySelector('#channelName').innerHTML = channel.snippet.title;
+            document.querySelector('#channelSubscribers').innerHTML = channel.statistics.subscriberCount;
+            document.querySelector('#channelVideos').innerHTML = channel.statistics.videoCount;
+            document.querySelector('#channelViews').innerHTML = channel.statistics.viewCount;
+          });
+      }
+
+      function video() {
+        videoID = document.querySelector("#videoID").value;
+        var part = 'snippet,statistics';
+
+        var url = 'https://www.googleapis.com/youtube/v3/videos';
+        url += '?part=' + encodeURIComponent(part);
+        url += '&id=' + encodeURIComponent(videoID);
+        url += '&key=' + encodeURIComponent(apiKey);
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            var video = data.items[0];
+
+            document.querySelector('#videoViews').innerHTML = video.statistics.viewCount;
+            document.querySelector('#videoLikes').innerHTML = video.statistics.likeCount;
+            document.querySelector('#videoComments').innerHTML = video.statistics.commentCount;
+          });
+      }
+    </script>
+  </body>
+</html>
