@@ -1,2 +1,0 @@
-# youtubeanalyticjavascript
-youtubeanalyticjavascript
